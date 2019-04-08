@@ -1,4 +1,4 @@
-# 2019 SW Convergence Capstone Design
+﻿# 2019 SW Convergence Capstone Design
 ## B.E.E (Be your Eyes and Ears)
 한국외국어대학교 융복합소프트웨어<br/>
 2019년 종합설계 팀 프로젝트 3조 'B.E.E'의 기술 구조 정리
@@ -30,5 +30,5 @@
 
 <br/>
 
-#### How to work?
+#### How it works?
 ![](./imgs/process.png)
