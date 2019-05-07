@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/wall"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/result"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="30dp"
+        android:background="#99141414"
+        android:maxHeight="180dp"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:id="@+id/btnLayout"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/retry"
+            android:layout_width="90dp"
+            android:layout_height="78dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:background="#99141414"
+            android:scaleType="fitXY"
+            android:shadowRadius="5"
+            app:srcCompat="@drawable/retry" />
+
+        <ImageButton
+            android:id="@+id/braille"
+            android:layout_width="90dp"
+            android:layout_height="78dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:background="#99141414"
+            android:scaleType="fitXY"
+            android:shadowRadius="5"
+            app:srcCompat="@drawable/braille" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textLayout"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginBottom="100dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/recheck"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:text="다시 입력"
+            android:background="#99141414"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/convert"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:background="#99141414"
+            android:text="점자 변환"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/brailleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="점자 변환 결과가 이곳에 표시됩니다."
+            android:background="#99141414"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+</LinearLayout>
