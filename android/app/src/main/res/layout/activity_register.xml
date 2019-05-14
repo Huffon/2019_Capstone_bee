@@ -1,22 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/wall"
     tools:context=".RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button2"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:orientation="vertical"
+            android:background="@color/colorPrimary">
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="60dp">
+
+            <LinearLayout
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="80dp"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:hint="ID"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#ffffff"
+                    android:id="@+id/idText"
+                    android:layout_marginRight="10dp"
+                    android:background="#f4b042"/>
+
+                <Button
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:background="#f4b042"
+                    android:text="Check ID"
+                    android:layout_gravity="center"
+                    android:id="@+id/validateButton"
+                    android:textColor="#ffffff"/>
+            </LinearLayout>
+
+            <EditText
+                android:inputType="textPassword"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:hint="PASSWORD"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:id="@+id/passwordText"
+                android:layout_marginTop="10dp"
+                android:background="#f4b042"/>
+
+            <EditText
+                android:inputType="text"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:hint="E-mail"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:id="@+id/emailText"
+                android:layout_marginTop="10dp"
+                android:background="#f4b042"/>
+
+            <RadioGroup
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/genderGroup"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                >
+
+                <RadioButton
+                    android:id="@+id/genderWoman"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@android:color/holo_orange_dark"
+                    android:checked="true"
+                    android:text="female"
+                    android:textColor="#ffffff"
+                    android:textSize="18dp" />
+
+                <RadioButton
+                    android:id="@+id/genderMan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@android:color/holo_orange_dark"
+                    android:text="male"
+                    android:textColor="#ffffff"
+                    android:textSize="18dp" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="280dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="#f4b042"
+                android:text="register"
+                android:textColor="#ffffff"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
     </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

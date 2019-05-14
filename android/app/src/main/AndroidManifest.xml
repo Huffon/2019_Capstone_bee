@@ -3,6 +3,8 @@
     package="com.example.huffon.bee_and">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -23,5 +25,4 @@
         <activity android:name=".ChkActivity"/>
         <activity android:name=".TtsActivity"/>
     </application>
-
 </manifest>

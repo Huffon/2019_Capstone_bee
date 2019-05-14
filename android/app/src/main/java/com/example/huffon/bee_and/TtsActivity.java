@@ -20,6 +20,7 @@ public class TtsActivity extends AppCompatActivity {
     TextToSpeech tts;
     TextView message;
     TextView speak;
+    TextView home;
     ImageButton speakBtn;
 
     @Override
@@ -34,6 +35,7 @@ public class TtsActivity extends AppCompatActivity {
         message = (TextView)findViewById(R.id.textView);
         speakBtn = (ImageButton)findViewById(R.id.board);
         speak = (TextView)findViewById(R.id.speak);
+        home = (TextView)findViewById(R.id.reply);
 
         message.setText(result);
         message.setTextColor(Color.WHITE);
@@ -58,6 +60,14 @@ public class TtsActivity extends AppCompatActivity {
                 String toSpeak = text;
                 Toast.makeText(getApplicationContext(), toSpeak, Toast.LENGTH_SHORT).show();
                 tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SttActivity.class);
+                startActivity(intent);
             }
         });
     }

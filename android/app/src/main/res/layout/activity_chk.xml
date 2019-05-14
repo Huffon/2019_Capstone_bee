@@ -99,4 +99,13 @@
             android:textSize="13sp"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/send"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:textColor="@android:color/white"
+        android:text="전송하기"
+        android:layout_gravity="center"
+        android:background="@null"/>
+
 </LinearLayout>

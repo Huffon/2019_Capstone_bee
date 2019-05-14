@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,15 +34,17 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 public class ChkActivity extends AppCompatActivity {
-    public static final int LOAD_SUCCESS = 101;
     private String REQUEST_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/bee?word=";
     private String convertQuery = null;
     private String value;
+    private String valuefin;
 
+    private AlertDialog dialog;
     private TextView message;
     private TextView conv_result;
     private ImageButton ttb;
     private ImageButton retrial;
+    private Button send;
 
     private ProgressDialog progressDialog;
 
@@ -58,6 +61,7 @@ public class ChkActivity extends AppCompatActivity {
         conv_result = (TextView) findViewById(R.id.brailleText);
         retrial = (ImageButton) findViewById(R.id.retry);
         ttb = (ImageButton) findViewById(R.id.braille);
+        send = (Button) findViewById(R.id.send);
         message.setText(result);
 
         try {
@@ -85,12 +89,32 @@ public class ChkActivity extends AppCompatActivity {
                 getJSON();
             }
         });
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (valuefin == null){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ChkActivity.this);
+                    dialog = builder.setMessage("점자 변환을 먼저 수행해주세요!")
+                            .setNegativeButton("확인", null)
+                            .create();
+                    dialog.show();
+                } else {
+//                    Intent intent = new Intent(getApplicationContext(), TtsActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), BluetoothActivity.class);
+                    intent.putExtra("braille", valuefin);
+                    intent.putExtra("sentence", "test");
+                    System.out.println(valuefin);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             Bundle bun = msg.getData();
-            String valuefin = bun.getString("value");
+            valuefin = bun.getString("value");
             conv_result.setText("점자 변환 결과가 이곳에 표시됩니다.\n" + valuefin);
         }
     };

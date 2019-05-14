@@ -14,6 +14,7 @@
         android:background="#99141414"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="80dp"
         android:padding="8dp"
         android:maxHeight="180dp"
@@ -35,7 +36,20 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="30dp"
         android:background="#99141414"
         android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@null"
+        android:text="답하기"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="15dp" />
 
 </LinearLayout>
