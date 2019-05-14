@@ -17,8 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".BluetoothActivity"/>
         <activity android:name=".SttActivity"/>
         <activity android:name=".ChkActivity"/>
         <activity android:name=".TtsActivity"/>
     </application>
+
 </manifest>
