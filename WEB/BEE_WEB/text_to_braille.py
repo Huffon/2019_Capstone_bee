@@ -1,7 +1,8 @@
+import json
 import hgtk
 
 MATCH_H2B_CHO = {
-    u'ㄱ': '04', u'ㄴ': '36', u'ㄷ': '20', u'ㄹ': '02', u'ㅁ': '34',
+    u'ㄱ': '04', u'ㄴ': '36', u'ㄷ': '', u'ㄹ': '02', u'ㅁ': '34',
     u'ㅂ': '06', u'ㅅ': '01', u'ㅇ': '54', u'ㅈ': '05', u'ㅊ': '03',
     u'ㅋ': '52', u'ㅌ': '50', u'ㅍ': '38', u'ㅎ': '22',
 
@@ -15,8 +16,7 @@ MATCH_H2B_JOONG = {
     u'ㅐ': '58', u'ㅔ': '46', u'ㅖ': '12', u'ㅢ': '23', u'ㅘ': '57',
     u'ㅚ': '47', u'ㅝ': '60',
 
-    u'ㅙ': '5758', u'ㅒ': '1458', u'ㅞ': '6058', u'ㅟ': '4458',
-
+    u'ㅙ': '5758', u'ㅒ': '1458', u'ㅞ': '6058', u'ㅟ': '4458'
 }
 
 MATCH_H2B_JONG = {
@@ -28,15 +28,14 @@ MATCH_H2B_JONG = {
     u'ㄶ': '1811', u'ㄺ': '1632', u'ㄻ': '1617',
     u'ㄼ': '1648', u'ㄽ': '1608', u'ㄾ': '1625',
     u'ㅀ': '1611', u'ㅄ': '4808',
-
-    u'ㅆ': '12',
+    u'ㅆ': '12'
 }
 
 MATCH_H2B_ECT = {
     '1': '1532', '2': '1548', '3': '1536', '4': '1538', '5': '1534',
     '6': '1552', '7': '1554', '8': '1550', '9': '1520', '0': '1522',
 
-    ',': '16', '.': '19', '-': '18', '?': '23', '_': '09', '!': '26',
+    ',': '16', '.': '19', '-': '18', '?': '23', '_': '09', '!': '26'
 }
 
 def fastest_handler(fast_text):
@@ -47,7 +46,8 @@ def fastest_handler(fast_text):
                     '그런데': '3246',
                     '그리고': '3241',
                     '그리하여': '3235',
-                    '것': '0728'}
+                    '것': '0728'
+    }
 
     if fast_text in abbreviation:
         return abbreviation[fast_text]
@@ -62,7 +62,7 @@ def second_handler(second_text):
                     '억': '39', '언': '31', '얼': '30', '연': '33',
                     '열': '51', '영': '55', '옥': '45', '온': '59',
                     '옹': '63', '운': '54', '울': '61', '은': '43',
-                    '을': '29', '인': '62',
+                    '을': '29', '인': '62'
                     }
 
     if second_text in abbreviation:
@@ -113,9 +113,10 @@ def letter(hangul_letter):
     return result
 
 
-def main(text):
+def lambda_handler(event, context):
+    hangul_sentence = event['korean_word']
     result = ""
-    text = text.split(" ")
+    text = hangul_sentence.split(" ")
 
     # 이종약자 규칙 먼저 걸러줌
     for elem in text:
@@ -130,8 +131,9 @@ def main(text):
         else:
             for hangul_letter in elem:
                 result+= letter(hangul_letter)
-
-    return result
-
-
-print(main("양"))
+    
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps(result)
+    }
