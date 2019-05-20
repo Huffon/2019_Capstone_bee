@@ -29,8 +29,12 @@
 - 안드로이드 어플리케이션 + 아두이노 디바이스를 활용하여 구현
 
 <br/>
+### Android 화면 구성도
+|  Page1  | Page2         |
+| :---:    | :-----------: |
+|  ./imgs/bee1.png  | ./imgs/bee2.png   |
 
-#### Architecture
+### Architecture
 ![](./imgs/total_architecture.png)
 > BEE의 전체 구조
 
@@ -47,5 +51,4 @@
 
 <br/>
 
-#### How it works?
-![](./imgs/process.png)
+
