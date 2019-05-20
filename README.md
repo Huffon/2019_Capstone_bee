@@ -2,8 +2,19 @@
 ## BEE (Be your Eyes and Ears)
 한국외국어대학교 융복합소프트웨어<br/>
 2019년 종합설계 팀 프로젝트 3조 **BEE**의 기술 구조 정리
-<br/>
+<br/><br/>
 
+### Team **BEE**
+|  Name  | Major         | Responsibility   | Email            |
+| :---:    | :-----------: | :-------------:  | :---------------: |
+|  **허 훈**  | 포르투갈어    | Mobile - Android | huffonism@gmail.com |
+|  고도현  | 국제스포츠레저 | Web - Node.js    | @gmail.com |
+|  고용규  | 아랍어통번역   | HW - Arduino     | @gmail.com |
+|  김서연  | 국제스포츠레저 | Web - Python     | @gmail.com |
+|  송무경  | 스페인어통번역 | HW - Arduino     | @gmail.com |
+|  이윤주  | 우크라이나어   | Web - Python     | @gmail.com |
+
+<br/>
 
 ### Overview
 - 현재 대한민국에는 5000 ~ 1만 명의 시청각장애인분들이 거주 중
