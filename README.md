@@ -33,7 +33,7 @@
 ### Android 화면 구성도
 |:memo: Page 001|:memo: Page 002|
 |:-------------:|:-------------:|
-|![001](./imgs/bee1.png)|![002](./imgs/bee2.png)|
+|![](./imgs/bee1.png)|![](./imgs/bee2.png)|
 
 <br/>
 
