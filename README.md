@@ -4,7 +4,7 @@
 2019년 종합설계 팀 프로젝트 3조 **BEE**의 기술 구조 정리
 <br/><br/>
 
-### ★ Team **BEE**
+### ▶ Team **BEE**
 |  Name  | Major         | Responsibility   | Email            |
 | :---:    | :-----------: | :-------------:  | :---------------: |
 |  **허 훈**  | 포르투갈어    | Mobile - Android | huffonism@gmail.com |
