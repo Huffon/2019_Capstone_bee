@@ -48,13 +48,16 @@
 ![](./imgs/total_architecture.png)
 > BEE의 전체 구조
 
+
 <br/>
 
 ![](./imgs/hardware.jpg)
 > 하드웨어 구성도 
 
+
 ![](./imgs/api_server.png)
 > BEE API Server 구성도
+
 
 ![](./imgs/database_server.png)
 > BEE Database Server 구성도
