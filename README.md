@@ -8,11 +8,11 @@
 |  Name  | Major         | Responsibility   | Email            |
 | :---:    | :-----------: | :-------------:  | :---------------: |
 |  **허 훈**  | 포르투갈어    | Mobile - Android | huffonism@gmail.com |
-|  고도현  | 국제스포츠레저 | Web - Node.js    | @gmail.com |
-|  고용규  | 아랍어통번역   | HW - Arduino     | @gmail.com |
-|  김서연  | 국제스포츠레저 | Web - Python     | @gmail.com |
-|  송무경  | 스페인어통번역 | HW - Arduino     | @gmail.com |
-|  이윤주  | 우크라이나어   | Web - Python     | @gmail.com |
+|  고도현  | 국제스포츠레저 | Web - Node.js    | kodo931228@gmail.com |
+|  고용규  | 아랍어통번역   | HW - Arduino     | goyg6123@gmail.com |
+|  김서연  | 국제스포츠레저 | Web - Python     | 2seoyeoni@gmail.com |
+|  송무경  | 우크라이나어 | HW - Arduino     | runmksong@gmail.com |
+|  이윤주  | 스페인어통번역 | Web - Python     | lyla02217@gmail.com |
 
 <br/>
 
