@@ -40,7 +40,7 @@ public class CheckActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chk);
+        setContentView(R.layout.activity_check);
 
         Intent intent = getIntent();
         String text = intent.getExtras().getString("sentence");
@@ -95,7 +95,7 @@ public class CheckActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(getApplicationContext(), BluetoothActivity.class);
                     intent.putExtra("braille", valuefin);
-//                  startActivity(intent);
+                  startActivity(intent);
                 }
             }
         });

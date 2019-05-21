@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:background="@drawable/wall"
-    tools:context=".SttActivity">
+    tools:context=".STTActivity">
 
     <TextView
         android:id="@+id/sttIntro"

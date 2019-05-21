@@ -2,9 +2,6 @@ package com.example.huffon.bee_and;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -12,19 +9,13 @@ import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-public class SttActivity extends AppCompatActivity {
+public class STTActivity extends AppCompatActivity {
     final int PERMISSION = 1;
 
     TextView description;
@@ -37,7 +28,8 @@ public class SttActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stt);
 
-        if ( Build.VERSION.SDK_INT >= 23 ){ // SDK 버전 및 퍼미션 체크
+        // 안드로이드 SDK 버전 및 퍼미션 체크
+        if ( Build.VERSION.SDK_INT >= 23 ){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET,
                     Manifest.permission.RECORD_AUDIO}, PERMISSION);
         }
@@ -51,6 +43,7 @@ public class SttActivity extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
 
+        // 음성인식 수행 버튼
         sttBtn.setOnClickListener(v ->{
             mRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
@@ -111,11 +104,12 @@ public class SttActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " + message,Toast.LENGTH_SHORT).show();
         }
 
+        // 음성인식 결과를 다음 액티비티에 전달
         @Override
         public void onResults(Bundle results) {
             ArrayList<String> matches =
                     results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            Intent intent = new Intent(getApplicationContext(), ChkActivity.class);
+            Intent intent = new Intent(getApplicationContext(), CheckActivity.class);
             intent.putExtra("sentence", matches.get(0)); // 1번 후보 문장 채택
             startActivity(intent);
         }

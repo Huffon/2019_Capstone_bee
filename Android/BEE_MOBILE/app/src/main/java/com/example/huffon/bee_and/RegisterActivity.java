@@ -43,9 +43,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         RadioGroup genderGroup = (RadioGroup)findViewById(R.id.genderGroup);
         int genderGroupID = genderGroup.getCheckedRadioButtonId();
-        userGender = ((RadioButton)findViewById(genderGroupID)).getText().toString();//초기화 값을 지정해줌
+        userGender = ((RadioButton)findViewById(genderGroupID)).getText().toString();
 
-        //라디오버튼이 눌리면 값을 바꿔주는 부분
+        // 성별을 선택하기 위한 라디오 버튼이 눌리면 값을 바꿔줌
         genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -54,15 +54,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // 회원 가입 시 아이디가 중복이 아닌지 확인하는 로직
+        // 회원 가입 시 아이디가 중복이 아닌지 확인하기 위해 LoginRequest 수행
         final Button validateButton = (Button)findViewById(R.id.validateButton);
         validateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userID = idText.getText().toString();
-                if(validate){
-                    return; //검증 완료
-                }
+                // 이미 검증되었으면, 검증을 수행하지 않고 바로 넘어감
+                if(validate)
+                    return;
+
                 // 아이디를 입력하지 않았다면,
                 if(userID.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
@@ -73,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 검증 시작
+                // LoginRequest 시작
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
@@ -81,17 +82,21 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_LONG).show();
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-                            if(success){ // 사용할 수 있는 아이디일 경우,
+
+                            // 사용할 수 있는 아이디일 경우,
+                            if(success){
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                                 dialog = builder.setMessage("사용할 수 있는 아이디입니다.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                idText.setEnabled(false); // 아이디 값을 바꿀 수 없도록 함
-                                validate = true; // 검증완료
+                                idText.setEnabled(false);
+                                validate = true; // 검증 완료
                                 idText.setBackgroundColor(getResources().getColor(R.color.colorGray));
                                 validateButton.setBackgroundColor(getResources().getColor(R.color.colorGray));
-                            } else { // 사용할 수 없는 아이디일 경우,
+                            }
+                            // 사용할 수 없는 아이디일 경우,
+                            else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                                 dialog = builder.setMessage("이미 사용 중인 아이디입니다.")
                                         .setNegativeButton("확인", null)
@@ -103,8 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                }; // Response.Listener 완료
-                // Volley 라이브러리를 이용해서 실제 서버와 통신을 구현하는 부분
+                };
                 ValidateRequest validateRequest = new ValidateRequest(userID, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                 queue.add(validateRequest);
@@ -112,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        // 회원 가입 버튼을 눌렀을 때
+        // 회원 가입 버튼을 통해 RegisterRequest 수행
         Button registerButton = (Button)findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                 userPassword = passwordText.getText().toString();
                 userEmail = emailText.getText().toString();
 
-                // 아이디 중복 체크를 했는지 확인
+                // 아이디 중복 체크를 수행했는지 확인
                 if(!validate){
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                     dialog = builder.setMessage("아이디 중복체크를 해주세요.")
@@ -131,7 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 정보를 하나라도 입력하지 않았을 경우
+                // 정보를 하나라도 입력하지 않았을 경우의 예외 처리
                 if(userID.equals("")||userPassword.equals("")||userEmail.equals("")||userGender.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                     dialog = builder.setMessage("모든 정보를 입력해주세요.")
@@ -141,21 +145,24 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 회원 가입 요청 시작
+                // 회원 가입 요청
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
                         try{
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-                            if(success){ // 사용할 수 있는 아이디라면
+                            // 사용할 수 있는 아이디일 경우, 회원가입 후 회원가입 창 닫아줌
+                            if(success){
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                                 dialog = builder.setMessage("회원 가입이 완료되었습니다.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                finish(); // 액티비티를 종료시킴(회원등록 창을 닫음)
-                            }else{ // 사용할 수 없는 아이디라면
+                                finish();
+                            }
+                            // 사용할 수 없는 아이디일 경우의 예외 처리
+                            else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                                 dialog = builder.setMessage("회원 가입에 실패했습니다.")
                                         .setNegativeButton("확인", null)
@@ -167,8 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                };// Response.Listener 완료
-                // Volley 라이브러리를 이용해서 실제 서버와 통신을 구현하는 부분
+                };
                 RegisterRequest registerRequest = new RegisterRequest(userID, userPassword, userGender, userEmail, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                 queue.add(registerRequest);

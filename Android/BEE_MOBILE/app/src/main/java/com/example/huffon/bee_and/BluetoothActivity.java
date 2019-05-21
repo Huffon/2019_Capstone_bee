@@ -1,5 +1,6 @@
 package com.example.huffon.bee_and;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,14 +37,12 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by Huffon on 5/8/2019.
  */
 
-public class BluetoothActivity extends AppCompatActivity
-{
-    private String REQUEST_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/bee?word=";
+public class BluetoothActivity extends AppCompatActivity {
+    private String REQUEST_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/btt?braille=";
     private String convertedResult;
     private final int REQUEST_BLUETOOTH_ENABLE = 100;
     private TextView mConnectionStatus;
     private EditText mInputEditText;
-    private Button send;
 
     private AlertDialog dialog;
     ConnectedTask mConnectedTask = null;
@@ -50,6 +52,7 @@ public class BluetoothActivity extends AppCompatActivity
     static boolean isConnectionError = false;
     private static final String TAG = "BluetoothClient";
     private String recvMessage;
+    private String text;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -58,28 +61,26 @@ public class BluetoothActivity extends AppCompatActivity
         setContentView(R.layout.activity_bluetooth);
 
         Intent prevIntent = getIntent();
-        String text = prevIntent.getExtras().getString("braille");
+        text = prevIntent.getExtras().getString("braille");
         text = text.replace("\"", "");
 
-        Button send = (Button) findViewById(R.id.send);
         Button sendButton = (Button)findViewById(R.id.send_button);
+        Button result = (Button) findViewById(R.id.send);
         mConnectionStatus = (TextView)findViewById(R.id.connection_status_textview);
         mInputEditText = (EditText)findViewById(R.id.input_string_edittext);
         mInputEditText.setText(text);
         ListView mMessageListview = (ListView) findViewById(R.id.message_listview);
 
-        // TTS 수행
-        send.setOnClickListener(new View.OnClickListener() {
+        result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getJSON(); // 이후 convertedResult 보내기!
-                Intent intent = new Intent(getApplicationContext(), TtsActivity.class);
-                intent.putExtra("sentence", "테스트");
+                Intent intent = new Intent(getApplicationContext(), TTSActivity.class);
+                intent.putExtra("url", REQUEST_URL);
                 startActivity(intent);
             }
         });
 
-        // 아두이노로 데이터 전송
+        // 아두이노로 변환된 점자 데이터 전송
         sendButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 String sendMessage = mInputEditText.getText().toString();
@@ -95,14 +96,14 @@ public class BluetoothActivity extends AppCompatActivity
 
         Log.d( TAG, "블루투스 어댑터를 초기화 중입니다.");
 
-        // 블루투스 초기화 실패 시
+        // 블루투스 초기화 실패 시, 에러 메시지 display
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             showErrorDialog("이 기기는 블루투스를 지원하지 않습니다.");
             return;
         }
 
-        // 블루투스 초기화 성공 시
+        // 블루투스 초기화 성공 시, 성공 메시지 display
         if (!mBluetoothAdapter.isEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_BLUETOOTH_ENABLE);
@@ -119,7 +120,8 @@ public class BluetoothActivity extends AppCompatActivity
         ConnectTask(BluetoothDevice bluetoothDevice) {
             mBluetoothDevice = bluetoothDevice;
             mConnectedDeviceName = bluetoothDevice.getName();
-            //SPP
+
+            //안드로이드 단말기 고유값 설정
             UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
             try {
@@ -135,15 +137,13 @@ public class BluetoothActivity extends AppCompatActivity
         @Override
         protected Boolean doInBackground(Void... params) {
             mBluetoothAdapter.cancelDiscovery();
-            // 블루투스 소켓을 이용한 연결
+            // 소켓을 이용해 디바이스와 블루투스 연결
             try {
                 mBluetoothSocket.connect();
             } catch (IOException e) {
                 try {
                     mBluetoothSocket.close();
                 } catch (IOException e2) {
-                    Log.e(TAG, "Socket close 실패" +
-                            " socket during connection failure", e2);
                 }
                 return false;
             }
@@ -167,6 +167,7 @@ public class BluetoothActivity extends AppCompatActivity
         mConnectedTask.execute();
     }
 
+    // 디바이스 연결 성공 시, 화면에 성공 상태를 표시해주기 위한 메서드
     private class ConnectedTask extends AsyncTask<Void, String, Boolean> {
         private InputStream mInputStream = null;
         private OutputStream mOutputStream = null;
@@ -178,9 +179,7 @@ public class BluetoothActivity extends AppCompatActivity
                 mInputStream = mBluetoothSocket.getInputStream();
                 mOutputStream = mBluetoothSocket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "소켓 생성에 실패했습니다.", e );
             }
-            Log.d( TAG, "Connected to "+mConnectedDeviceName);
             mConnectionStatus.setText( "Connected to "+mConnectedDeviceName);
         }
 
@@ -224,6 +223,7 @@ public class BluetoothActivity extends AppCompatActivity
             mConversationArrayAdapter.insert(mConnectedDeviceName + ": " + recvMessage[0], 0);
             System.out.println("아두이노가 보낸 메시지: " + recvMessage[0]);
 
+            REQUEST_URL += recvMessage[0];
             AlertDialog.Builder builder = new AlertDialog.Builder(BluetoothActivity.this);
             dialog = builder.setMessage("상대방으로부터 메시지를 수신 받았습니다.")
                     .setNegativeButton("확인", null)
@@ -236,9 +236,7 @@ public class BluetoothActivity extends AppCompatActivity
             super.onPostExecute(isSucess);
             if ( !isSucess ) {
                 closeSocket();
-                Log.d(TAG, "Device connection was lost");
                 isConnectionError = true;
-                showErrorDialog("Device connection was lost");
             }
         }
 
@@ -251,10 +249,7 @@ public class BluetoothActivity extends AppCompatActivity
         void closeSocket(){
             try {
                 mBluetoothSocket.close();
-                Log.d(TAG, "close socket()");
             } catch (IOException e2) {
-                Log.e(TAG, "unable to close() " +
-                        " socket during connection failure", e2);
             }
         }
 
@@ -264,21 +259,19 @@ public class BluetoothActivity extends AppCompatActivity
                 mOutputStream.write(msg.getBytes());
                 mOutputStream.flush();
             } catch (IOException e) {
-                Log.e(TAG, "Exception during send", e );
             }
             mInputEditText.setText(" ");
         }
     }
 
-
-    public void showPairedDevicesListDialog()
-    {
+    // 연결 가능한 기기 display
+    public void showPairedDevicesListDialog() {
         Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
         final BluetoothDevice[] pairedDevices = devices.toArray(new BluetoothDevice[0]);
 
         if ( pairedDevices.length == 0 ){
-            showQuitDialog( "No devices have been paired.\n"
-                    +"You must pair it with another device.");
+            showQuitDialog( "연결된 기기가 존재하지 않습니다.\n"
+                    +"다비이스와 연결을 먼저 해주세요.");
             return;
         }
 
@@ -289,7 +282,7 @@ public class BluetoothActivity extends AppCompatActivity
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select device");
+        builder.setTitle("디바이스를 선택해주세요.");
         builder.setCancelable(false);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -301,7 +294,6 @@ public class BluetoothActivity extends AppCompatActivity
         });
         builder.create().show();
     }
-
 
     // 점자 정보 전송
     void sendMessage(String msg){
@@ -336,8 +328,7 @@ public class BluetoothActivity extends AppCompatActivity
     }
 
     // 연결 에러 시 문구 생성
-    public void showErrorDialog(String message)
-    {
+    public void showErrorDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quit");
         builder.setCancelable(false);
@@ -356,8 +347,7 @@ public class BluetoothActivity extends AppCompatActivity
     }
 
     // 대화 강제 종료 시 문구 생성
-    public void showQuitDialog(String message)
-    {
+    public void showQuitDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quit");
         builder.setCancelable(false);
@@ -370,45 +360,5 @@ public class BluetoothActivity extends AppCompatActivity
             }
         });
         builder.create().show();
-    }
-
-    public void  getJSON() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(REQUEST_URL);
-                    HttpsURLConnection myConnection = (HttpsURLConnection)url.openConnection();
-
-                    if (myConnection.getResponseCode() == 200) {// Success
-                        InputStream responseBody = myConnection.getInputStream();
-                        InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
-
-                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-                        jsonReader.beginObject(); // Start processing the JSON object
-
-                        while (jsonReader.hasNext()) { // Loop through all keys
-                            String key = jsonReader.nextName(); // Fetch the next key
-                            if (key.equals("body")) { // Check if desired key
-                                convertedResult = jsonReader.nextString();
-
-                                Bundle bun = new Bundle();
-                                bun.putString("value", convertedResult);
-
-                                break; // Break out of the loop
-                            } else { // Skip values of other keys
-                                jsonReader.skipValue();
-                            }
-                        }
-                        jsonReader.close();
-                        myConnection.disconnect();
-                    } else { // Error handling code goes here
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }

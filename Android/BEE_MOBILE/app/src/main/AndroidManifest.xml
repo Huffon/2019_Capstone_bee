@@ -21,8 +21,8 @@
         </activity>
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".BluetoothActivity"/>
-        <activity android:name=".SttActivity"/>
-        <activity android:name=".ChkActivity"/>
-        <activity android:name=".TtsActivity"/>
+        <activity android:name=".STTActivity"/>
+        <activity android:name=".CheckActivity"/>
+        <activity android:name=".TTSActivity"/>
     </application>
 </manifest>

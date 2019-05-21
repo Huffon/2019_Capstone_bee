@@ -55,21 +55,23 @@
     <ListView
         android:id="@+id/message_listview"
         android:layout_width="wrap_content"
-        android:layout_height="380dp" />
+        android:layout_height="350dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/send"
-            android:layout_marginBottom="20dp"
-            android:layout_width="200dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="문자 변환"
-            android:background="#f4b042"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#f4b042"
+            android:text="결과 확인" />
     </LinearLayout>
 
 </LinearLayout>

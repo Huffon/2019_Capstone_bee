@@ -17,7 +17,8 @@ public class LoginRequest extends StringRequest {
     private Map<String, String> parameters;
 
     public LoginRequest(String userID, String userPassword, Response.Listener<String> listener){
-        super(Method.POST, URL, listener, null);//해당 URL에 POST방식으로 파라미터들을 전송함
+        // 지정 URL에 POST 방식으로 파라미터들을 전송
+        super(Method.POST, URL, listener, null);
         parameters = new HashMap<>();
         parameters.put("userID", userID);
         parameters.put("userPassword", userPassword);

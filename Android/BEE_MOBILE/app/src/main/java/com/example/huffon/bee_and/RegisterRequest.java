@@ -13,11 +13,12 @@ import java.util.Map;
  */
 
 public class RegisterRequest extends StringRequest {
-    final static private String URL = "http://18.191.251.171/UserRegister.php";
+    final static private String URL = "http://18.191.251.171/user/register";
     private Map<String, String> parameters;
 
     public RegisterRequest(String userID, String userPassword, String userGender, String userEmail, Response.Listener<String> listener){
-        super(Method.POST, URL, listener, null);//해당 URL에 POST방식으로 파마미터들을 전송함
+        // 지정 URL에 POST 방식으로 파라미터들을 전송
+        super(Method.POST, URL, listener, null);
         parameters = new HashMap<>();
         parameters.put("userID", userID);
         parameters.put("userPassword", userPassword);

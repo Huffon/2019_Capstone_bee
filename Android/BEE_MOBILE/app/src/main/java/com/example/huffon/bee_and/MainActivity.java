@@ -2,14 +2,12 @@ package com.example.huffon.bee_and;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -39,14 +37,17 @@ public class MainActivity extends AppCompatActivity {
         final EditText passwordText = (EditText) findViewById(R.id.passwordText);
         final Button loginButton = (Button)findViewById(R.id.loginButton);
 
+        // 로그인 완료 후, 이동할 액티비티 설정
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SttActivity.class);
+                Intent intent = new Intent(getApplicationContext(), STTActivity.class);
                 MainActivity.this.startActivity(intent);
                 finish();
             }
         });
+
+        // 로그인 버튼을 눌렀을 때, LoginRequest 수행
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                Intent intent = new Intent(MainActivity.this, SttActivity.class);
+                                Intent intent = new Intent(MainActivity.this, STTActivity.class); // STT로 바꾸기
+//                                intent.putExtra("braille", "3228"); // 지우기
                                 MainActivity.this.startActivity(intent);
                                 finish();
                             }else {
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop(){
         super.onStop();
-        if(dialog != null){//다이얼로그가 켜져있을때 함부로 종료가 되지 않게함
+        if(dialog != null){
             dialog.dismiss();
             dialog = null;
         }
