@@ -42,12 +42,12 @@
 |:memo: Page 005|:memo: Page 006|
 |:-------------:|:-------------:|
 |![005](./imgs/bee5.png)|![006](./imgs/bee6.png)|
+
 <br/>
 
 ### ▶ Architecture
 ![](./imgs/total_architecture.png)
 > BEE의 전체 구조
-
 
 <br/>
 
