@@ -56,7 +56,7 @@
 
 
 ![](./imgs/api_server.png)
-> BEE API Server 구성도
+> BEE API 구성도
 
 
 ![](./imgs/database_server.png)
