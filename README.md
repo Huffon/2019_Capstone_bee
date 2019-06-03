@@ -45,7 +45,7 @@
 
 |:memo: Page 007|:memo: Page 008|
 |:-------------:|:-------------:|
-|![007](./imgs/dict.png =100x150)|![008](./imgs/normal.png =100x150)|
+|![007](./imgs/dict.png=253x424)|![008](./imgs/normal.png=253x424)|
 
 <br/>
 
