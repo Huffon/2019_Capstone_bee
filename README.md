@@ -43,6 +43,10 @@
 |:-------------:|:-------------:|
 |![005](./imgs/bee5.png)|![006](./imgs/bee6.png)|
 
+|:memo: Page 007|:memo: Page 008|
+|:-------------:|:-------------:|
+|![005](./imgs/dict.png)|![006](./imgs/normal.png)|
+
 <br/>
 
 ### ▶ Architecture
