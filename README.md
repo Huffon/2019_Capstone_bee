@@ -45,7 +45,7 @@
 
 |:memo: Page 007|:memo: Page 008|
 |:-------------:|:-------------:|
-|![005](./imgs/dict.png)|![006](./imgs/normal.png)|
+|![007](./imgs/dict.png)|![008](./imgs/normal.png)|
 
 <br/>
 
@@ -59,11 +59,6 @@
 > 하드웨어 구성도 
 
 
-![](./imgs/api_server.png)
-> BEE API 구성도
 
-
-![](./imgs/database_server.png)
-> BEE Database Server 구성도
 
 <br/>
