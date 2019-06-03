@@ -39,7 +39,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class BluetoothActivity extends AppCompatActivity {
     private String REQUEST_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/btt?braille=";
-    private String convertedResult;
     private final int REQUEST_BLUETOOTH_ENABLE = 100;
     private TextView mConnectionStatus;
     private EditText mInputEditText;
@@ -71,12 +70,14 @@ public class BluetoothActivity extends AppCompatActivity {
         mInputEditText.setText(text);
         ListView mMessageListview = (ListView) findViewById(R.id.message_listview);
 
+        // 아두이노로 부터 전달 받은 점자 정보로 업데이트 된 URL을 전송
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), TTSActivity.class);
                 intent.putExtra("url", REQUEST_URL);
-                startActivity(intent);
+                BluetoothActivity.this.startActivity(intent);
+                finish();
             }
         });
 
@@ -131,7 +132,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 Log.e( TAG, "Socket Create failed " + e.getMessage());
             }
 
-            mConnectionStatus.setText("connecting...");
+            mConnectionStatus.setText("연결 중입니다...");
         }
 
         @Override
@@ -180,7 +181,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 mOutputStream = mBluetoothSocket.getOutputStream();
             } catch (IOException e) {
             }
-            mConnectionStatus.setText( "Connected to "+mConnectedDeviceName);
+            mConnectionStatus.setText( "연결된 디바이스: "+mConnectedDeviceName);
         }
 
 
@@ -190,7 +191,7 @@ public class BluetoothActivity extends AppCompatActivity {
             int readBufferPosition = 0;
 
             while (true) {
-                if ( isCancelled() ) return false;
+                if (isCancelled()) return false;
                 try {
                     int bytesAvailable = mInputStream.available();
                     if(bytesAvailable > 0) {
