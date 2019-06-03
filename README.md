@@ -42,7 +42,11 @@
 |:memo: Page 005|:memo: Page 006|
 |:-------------:|:-------------:|
 |![005](./imgs/bee5.png)|![006](./imgs/bee6.png)|
-{:height="424px" width="253px"}|![008](./imgs/normal.png){:height="424px" width="253px"}|
+
+|:memo: Page 007|:memo: Page 008|
+|:-------------:|:-------------:|
+|![007](./imgs/normal.png){height="424px" width="253px"}|![008](./imgs/dict.png){height="424px" width="253px"}|
+
 
 <br/>
 
