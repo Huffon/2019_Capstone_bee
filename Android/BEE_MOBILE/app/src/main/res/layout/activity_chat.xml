@@ -19,8 +19,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:textColor="#ffffff"
-        android:layout_toStartOf="@+id/btnSend"
+        android:layout_toStartOf="@+id/btnSound"
         android:id="@+id/etText"/>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/btnSend"
+        android:layout_alignParentBottom="true"
+        android:background="#ff31f2"
+        android:layout_marginRight="5dp"
+        android:text="off"
+        android:id="@+id/btnSound"/>
 
     <Button
         android:layout_width="wrap_content"
