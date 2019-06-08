@@ -10,10 +10,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.TextKeyListener;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -56,9 +59,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class ChatActivity extends AppCompatActivity {
     public static final int LOAD_SUCCESS = 101;
     String TAG = "CHAT";
-    private String REQUEST_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/bee?word=";
-    private String DEFAULT_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/bee?word=";
-
+    TextToSpeech tts;
     private String BTT_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/btt?braille=";
     private String BTT_DEFAULT = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/btt?braille=";
 
@@ -74,9 +75,11 @@ public class ChatActivity extends AppCompatActivity {
     private String recvMessage;
     String text;
 
+    boolean soundFlag = false;
     int chatLog;
     EditText etText;
     Button btnSend;
+    Button btnSound;
     String email;
     List<Chat> mChat;
     FirebaseDatabase database;
@@ -86,10 +89,21 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        // 음성 출력을 위한 안드로이드 내 TTS 객체 생성
+        tts = new TextToSpeech(getApplication(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.KOREAN);
+                    tts.setSpeechRate((float)0.8);
+                }
+            }
+        });
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter.isEnabled()) {
-            showPairedDevicesListDialog();
-        }
+//        if (mBluetoothAdapter.isEnabled()) {
+//            showPairedDevicesListDialog();
+//        }
 
         database = FirebaseDatabase.getInstance();
 
@@ -103,9 +117,22 @@ public class ChatActivity extends AppCompatActivity {
 
         etText = (EditText)findViewById(R.id.etText);
         btnSend = (Button) findViewById(R.id.btnSend);
+        btnSound = (Button) findViewById(R.id.btnSound);
 
-        Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        btnSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(soundFlag == false) {
+                    btnSound.setText("ON");
+                    soundFlag = true;
+                } else {
+                    btnSound.setText("OFF");
+                    soundFlag = false;
+                }
+            }
+        });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +145,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
                 // 사용자가 메시지를 입력했을 때,
                 else {
+                    Calendar c = Calendar.getInstance();
                     String formattedDate = df.format(c.getTime());
                     DatabaseReference myRef = database.getReference("users").child(chatId).
                             child("chat").child(formattedDate);
@@ -154,17 +182,18 @@ public class ChatActivity extends AppCompatActivity {
                 String sender = chat.getEmail();
                 String msg = chat.getText();
 
-                if(!sender.equals(email) && msg.charAt(0) == 'n') {
-//                    try {
-//                        msg = URLEncoder.encode(text,"UTF-8");
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    }
+                System.out.println("Sent: "+ msg);
 
+                if(!sender.equals(email) && msg.charAt(0) == 'n') {
                     msg = msg.substring(1, msg.length());
-                    REQUEST_URL += msg;
                     Log.d( TAG, "상대방으로부터 메시지를 수신했습니다.");
-                    getBraille();
+                    if (!soundFlag) {
+                        String braille = Ttb.ttb_handler(msg);
+                        sendMessage(braille);
+                    } else {
+                        Toast.makeText(getApplication(), msg, Toast.LENGTH_SHORT).show();
+                        tts.speak(msg, TextToSpeech.QUEUE_FLUSH, null);
+                    }
                 }
              }
 
@@ -313,7 +342,6 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         void write(String msg) {
-            msg += "\n";
             try {
                 mOutputStream.write(msg.getBytes());
                 mOutputStream.flush();
@@ -322,90 +350,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    // JSON 데이터 포맷으로 점자 변환 정보를 요청하는 메서드
-    public void  getBraille() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(REQUEST_URL);
-                    Log.d( TAG, "점자 변환 주소: " + url);
-                    HttpsURLConnection myConnection = (HttpsURLConnection)url.openConnection();
-                    REQUEST_URL = DEFAULT_URL;
-
-                    if (myConnection.getResponseCode() == 200) {// Success
-                        InputStream responseBody = myConnection.getInputStream();
-                        InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
-
-                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-                        jsonReader.beginObject(); // Start processing the JSON object
-
-                        // JSON 파일을 모두 돌며 로직 수행
-                        while (jsonReader.hasNext()) {
-                            String key = jsonReader.nextName();
-                            // JSON 내 'body' 키를 가진 데이터 셋을 찾음
-                            if (key.equals("body")) {
-                                String value = jsonReader.nextString();
-                                Log.d( TAG, "점자 변환 결과: " + text);
-                                break;
-                            } else {
-                                jsonReader.skipValue();
-                            }
-                        }
-                        jsonReader.close();
-                        myConnection.disconnect();
-                    } else {
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-//    public void getBraille() {
-//        Thread thread = new Thread(new Runnable() {
-//            public void run() {
-//                try {
-//                    URL url = new URL(REQUEST_URL);
-//                    Log.d( TAG, "점자 변환 주소: " + url);
-//                    HttpURLConnection myConnection = (HttpURLConnection) url.openConnection();
-//                    REQUEST_URL = DEFAULT_URL;
-//
-//                    if (myConnection.getResponseCode() == 200) {// Success
-//                        InputStream responseBody = myConnection.getInputStream();
-//                        InputStreamReader responseBodyReader =
-//                                new InputStreamReader(responseBody, "UTF-8");
-//
-//                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-//                        jsonReader.beginObject(); // Start processing the JSON object
-//
-//                        // JSON 파일을 모두 돌며 로직 수행
-//                        while (jsonReader.hasNext()) {
-//                            String key = jsonReader.nextName();
-//
-//                            // JSON 내 'body' 키를 가진 데이터 셋을 찾음
-//                            if (key.equals("body")) {
-//                                text = jsonReader.nextString();
-//                                Log.d( TAG, "점자 변환 결과: " + text);
-//                                sendMessage(text);
-//                                break;
-//                            } else {
-//                                jsonReader.skipValue();
-//                            }
-//                        }
-//                        jsonReader.close();
-//                        myConnection.disconnect();
-//                    } else {
-//                    }
-//                } catch (Exception e) {
-//                }
-//            }
-//        });
-//        thread.start();
-//    }
-
+    // 디바이스에서 입력한 점자 정보를 String으로 바꾸기 위해 API 호출
     public void  getJSON() {
         Thread thread = new Thread(new Runnable() {
             public void run() {
@@ -474,6 +419,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
+    // Convert UTF-16 to String
     public String convertString(String input) throws UnsupportedEncodingException {
         String converted = "" + input;
         StringBuilder converter = new StringBuilder();
@@ -494,7 +440,7 @@ public class ChatActivity extends AppCompatActivity {
         return converted;
     }
 
-    // 연결 가능한 기기 display
+    // 블루투스 연결 가능한 기기 display
     public void showPairedDevicesListDialog() {
         Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
         final BluetoothDevice[] pairedDevices = devices.toArray(new BluetoothDevice[0]);
@@ -528,7 +474,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    // Bluetooth 기능 활성화 여부 확인
+    // 블루투스 기능 활성화 여부 확인
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_BLUETOOTH_ENABLE){
@@ -541,12 +487,16 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    // 연결 해제
+    // 블루투스 연결 해제
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
         if ( mConnectedTask != null ) {
             mConnectedTask.cancel(true);
         }
+        super.onDestroy();
     }
 }
