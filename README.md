@@ -7,12 +7,12 @@
 ### ▶ Team **BEE**
 |  Name  | Major         | Responsibility   | Email            | Github             |
 | :---:    | :-----------: | :-------------:  | :---------------: | :---------------: |
-|  **허 훈**  | 포르투갈어    | Mobile - Android | huffonism@gmail.com | Huffon |
-|  고도현  | 국제스포츠레저 | Web - Node.js    | kodo931228@gmail.com | Dohyeonko |
-|  고용규  | 아랍어통번역   | HW - Arduino     | goyg6123@gmail.com | YONGGYU-KO |
-|  김서연  | 국제스포츠레저 | Web - Python     | 2seoyeoni2@gmail.com | seoyeoni2 |
-|  송무경  | 우크라이나어 | HW - Arduino     | runmksong@gmail.com | runmksong |
-|  이윤주  | 스페인어통번역  | Web - Python     | lyla02217@gmail.com | ylpitseleh |
+|  **허 훈**  | 포르투갈어    | Mobile - Android | huffonism@gmail.com | [Huffon](https://github.com/Huffon) |
+|  고도현  | 국제스포츠레저 | Web - Node.js    | kodo931228@gmail.com | [Dohyeonko](https://github.com/Dohyeonko) |
+|  고용규  | 아랍어통번역   | HW - Arduino     | goyg6123@gmail.com | [YONGGYU-KO](https://github.com/YONGGYU-KO) |
+|  김서연  | 국제스포츠레저 | Web - Python     | 2seoyeoni2@gmail.com | [seoyeoni2](https://github.com/seoyeoni2) |
+|  송무경  | 우크라이나어 | HW - Arduino     | runmksong@gmail.com | [runmksong](https://github.com/runmksong) |
+|  이윤주  | 스페인어통번역  | Web - Python     | lyla02217@gmail.com | [ylpitseleh](https://github.com/ylpitseleh) |
 
 <br/>
 
