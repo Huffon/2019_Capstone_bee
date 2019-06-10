@@ -17,5 +17,5 @@ try:
 
 except:
     result = "사전에 등재되어 있지 않습니다."
-    
+
 print(result)
