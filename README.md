@@ -48,8 +48,7 @@
 > BEE의 전체 구조
 
 
-<br/>
-<br/>
+<br/><br/>
 
 
 ![](./imgs/hardware.jpg)
