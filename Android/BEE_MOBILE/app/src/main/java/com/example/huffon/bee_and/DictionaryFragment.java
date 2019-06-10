@@ -59,8 +59,6 @@ public class DictionaryFragment extends Fragment {
     private String DEFAULT_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/dict?word=";
     private String BTT_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/btt?braille=";
     private String BTT_DEFAULT = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/btt?braille=";
-    private String BRAILLE_URL = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/bee?word=";
-    private String BRAILLE_DEFAULT = "https://8k49oi12m2.execute-api.us-east-2.amazonaws.com/beeGet/bee?word=";
     private ProgressDialog progressDialog;
 
     @Override
@@ -73,11 +71,12 @@ public class DictionaryFragment extends Fragment {
         result = (TextView) v.findViewById(R.id.resultText);
         braille = (TextView) v.findViewById(R.id.resultBraille);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter.isEnabled()) {
-            showPairedDevicesListDialog();
-        }
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        if (mBluetoothAdapter.isEnabled()) {
+//            showPairedDevicesListDialog();
+//        }
 
+        // 사전 검색 버튼
         searchBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -102,25 +101,19 @@ public class DictionaryFragment extends Fragment {
             }
         });
 
+        // 사전 검색 결과 표시 및 점자 변환 버튼
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String braille = result.getText().toString();
-                try {
-                    braille = URLEncoder.encode(braille,"UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                BRAILLE_URL += braille;
-                progressDialog = new ProgressDialog( getActivity());
-                progressDialog.setMessage("점자 변환 중입니다!");
-                progressDialog.show();
-//                braille.set
-//                getBraille2();
-//                braille.s
+                String dictResult = result.getText().toString();
+                dictResult = dictResult.replace(",", " ");
+                String brailleResult = Ttb.ttb_handler(dictResult);
+                System.out.println(brailleResult);
+                braille.setText(brailleResult);
             }
         });
 
+        // 점자 변환 결과 표시 및 BEE Device 전송 버튼
         braille.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +132,8 @@ public class DictionaryFragment extends Fragment {
         public void handleMessage(Message msg) {
             Bundle bun = msg.getData();
             String valuefin = bun.getString("value");
+            valuefin = valuefin.replace("\"", "");
+
             try {
                 if (valuefin.equals("false")) {
                     result.setText("사전에 등재되지 않은 단어입니다.");
@@ -187,117 +182,13 @@ public class DictionaryFragment extends Fragment {
                                 text = jsonReader.nextString();
                                 // 모바일 화면에 표시해주기 위해 Handler에 텍스트 정보 전달
                                 Bundle bun = new Bundle();
-                                bun.putString("value", text);
                                 Message msg = handler.obtainMessage();
+
+                                bun.putString("value", text);
                                 msg.setData(bun);
                                 handler.sendMessage(msg);
 
                                 REQUEST_URL = DEFAULT_URL;
-                                progressDialog.dismiss();
-                                break;
-                            } else {
-                                jsonReader.skipValue();
-                            }
-                        }
-                        jsonReader.close();
-                        myConnection.disconnect();
-                    } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-        });
-        thread.start();
-    }
-
-    // 쓰레드는 직접 액티비티를 수정할 수 없으므로, Handler를 활용해 점자 정보 화면에 표시
-    Handler handler2 = new Handler() {
-        public void handleMessage(Message msg) {
-            Bundle bun = msg.getData();
-            stBraille = bun.getString("value");
-            braille.setText(stBraille);
-        }
-    };
-
-    public void  getBraille2() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(BRAILLE_URL);
-                    HttpsURLConnection myConnection = (HttpsURLConnection)url.openConnection();
-
-                    if (myConnection.getResponseCode() == 200) {// Success
-                        InputStream responseBody = myConnection.getInputStream();
-                        InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
-
-                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-                        jsonReader.beginObject(); // Start processing the JSON object
-
-                        // JSON 파일을 모두 돌며 로직 수행
-                        while (jsonReader.hasNext()) {
-                            String key = jsonReader.nextName();
-                            // JSON 내 'body' 키를 가진 데이터 셋을 찾음
-                            if (key.equals("body")) {
-                                String value = jsonReader.nextString();
-
-                                // 모바일 화면에 표시해주기 위해 Handler에 점자 정보 전달
-                                Bundle bun = new Bundle();
-                                bun.putString("value", value);
-                                Message msg = handler2.obtainMessage();
-                                msg.setData(bun);
-                                handler2.sendMessage(msg);
-                                BRAILLE_URL = BRAILLE_DEFAULT;
-
-                                progressDialog.dismiss();
-                                break;
-                            } else {
-                                jsonReader.skipValue();
-                            }
-                        }
-                        jsonReader.close();
-                        myConnection.disconnect();
-                    } else {
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void  getBraille() {
-        Thread thread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    URL url = new URL(BRAILLE_URL);
-                    HttpURLConnection myConnection = (HttpURLConnection) url.openConnection();
-
-                    if (myConnection.getResponseCode() == 200) {// Success
-                        InputStream responseBody = myConnection.getInputStream();
-                        InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
-
-                        JsonReader jsonReader = new JsonReader(responseBodyReader);
-                        jsonReader.beginObject(); // Start processing the JSON object
-
-                        // JSON 파일을 모두 돌며 로직 수행
-                        while (jsonReader.hasNext()) {
-                            String key = jsonReader.nextName();
-
-                            // JSON 내 'body' 키를 가진 데이터 셋을 찾음
-                            if (key.equals("body")) {
-                                text = jsonReader.nextString();
-                                Log.d( TAG, "점자 변환 결과: " + text);
-                                // 모바일 화면에 표시해주기 위해 Handler에 텍스트 정보 전달
-                                Bundle bun = new Bundle();
-                                bun.putString("value", text);
-                                Message msg = handler2.obtainMessage();
-                                msg.setData(bun);
-                                handler2.sendMessage(msg);
-
-                                BRAILLE_URL = BRAILLE_DEFAULT;
                                 progressDialog.dismiss();
                                 break;
                             } else {
@@ -565,10 +456,10 @@ public class DictionaryFragment extends Fragment {
     // 연결 해제
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if ( mConnectedTask != null ) {
             mConnectedTask.cancel(true);
         }
+        super.onDestroy();
     }
 
     public String convertString(String input) throws UnsupportedEncodingException {
