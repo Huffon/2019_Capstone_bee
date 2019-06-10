@@ -32,27 +32,26 @@
 <br/>
 
 ### ▶ 프로젝트 개요
-![](./imgs/개요.png)
+![](./imgs/개요.PNG)
 <br/>
 ### ▶ 디바이스 작동법
-![](./imgs/디바이스작동법.png)
+![](./imgs/디바이스작동법.PNG)
 <br/>
 ### ▶ 제품기능 
-![](./imgs/제품기능1.png)
-![](./imgs/제품기능2.png)
-![](./imgs/제품기능3.png)
+![](./imgs/제품기능1.PNG)
+![](./imgs/제품기능2.PNG)
+![](./imgs/제품기능3.PNG)
 <br/>
 
 ### ▶ Architecture
 ![](./imgs/total_architecture.png)
 > BEE의 전체 구조
 
-<br/>
+
+<br/><br/>
+
 
 ![](./imgs/hardware.jpg)
 > 하드웨어 구성도 
-
-
-
 
 <br/>
