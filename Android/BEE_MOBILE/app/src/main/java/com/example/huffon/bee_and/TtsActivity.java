@@ -63,6 +63,7 @@ public class TTSActivity extends AppCompatActivity {
             public void onInit(int status) {
                 if (status != TextToSpeech.ERROR) {
                     tts.setLanguage(Locale.KOREAN);
+                    tts.setSpeechRate((float)0.8);
                 }
             }
         });

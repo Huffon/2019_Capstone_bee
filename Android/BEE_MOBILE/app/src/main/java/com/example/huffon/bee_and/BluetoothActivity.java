@@ -70,7 +70,7 @@ public class BluetoothActivity extends AppCompatActivity {
         mInputEditText.setText(text);
         ListView mMessageListview = (ListView) findViewById(R.id.message_listview);
 
-        // 아두이노로 부터 전달 받은 점자 정보로 업데이트 된 URL을 전송
+        // 아두이노로 부터 전달 받은 점자 정보로 업데이트 된 URL을 다음 액티비티에 전송
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +81,7 @@ public class BluetoothActivity extends AppCompatActivity {
             }
         });
 
-        // 아두이노로 변환된 점자 데이터 전송
+        // 아두이노로 변환된 점자 데이터 BEE Device에 전송
         sendButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 String sendMessage = mInputEditText.getText().toString();

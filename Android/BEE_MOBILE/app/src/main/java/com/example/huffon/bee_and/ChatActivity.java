@@ -100,7 +100,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //        if (mBluetoothAdapter.isEnabled()) {
 //            showPairedDevicesListDialog();
 //        }
@@ -121,6 +121,7 @@ public class ChatActivity extends AppCompatActivity {
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        // 채팅을 음성으로 받아올 수 있는 스피커 버튼
         btnSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +135,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        // 메시지 전송 버튼
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,7 +172,9 @@ public class ChatActivity extends AppCompatActivity {
         mChat = new ArrayList<>();
         mAdapter = new ChatAdapter(mChat, email);
         recyclerView.setAdapter(mAdapter);
+
         DatabaseReference readRef = database.getReference("users").child(chatId).child("chat");
+        
         readRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -200,15 +204,12 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
-
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -221,14 +222,11 @@ public class ChatActivity extends AppCompatActivity {
 
         ConnectTask(BluetoothDevice bluetoothDevice) {
             mBluetoothDevice = bluetoothDevice;
-
             //안드로이드 단말기 고유값 설정
             UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-
             try {
                 mBluetoothSocket = mBluetoothDevice.createRfcommSocketToServiceRecord(uuid);
-            } catch (IOException e) {
-            }
+            } catch (IOException e) {}
         }
 
         @Override
@@ -240,8 +238,7 @@ public class ChatActivity extends AppCompatActivity {
             } catch (IOException e) {
                 try {
                     mBluetoothSocket.close();
-                } catch (IOException e2) {
-                }
+                } catch (IOException e2) {}
                 return false;
             }
             return true;
