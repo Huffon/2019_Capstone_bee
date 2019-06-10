@@ -47,12 +47,12 @@
 ![](./imgs/total_architecture.png)
 > BEE의 전체 구조
 
+
 <br/>
+<br/>
+
 
 ![](./imgs/hardware.jpg)
 > 하드웨어 구성도 
-
-
-
 
 <br/>
