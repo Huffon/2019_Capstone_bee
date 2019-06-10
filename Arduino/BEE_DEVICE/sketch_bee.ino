@@ -66,13 +66,13 @@ void loop() {
       for(int a=0;a<2;a++) {
       buffer[a] = NULL;
       }
-      delay(50);
+      delay(100);
       // 어플리케이션으로부터 모든 점자정보를 받아온 경우, 점자셀을 초기화
       if(!(BEE.available())){
         for(int s=0; s<6; s++){
           if(stat[s]==1){
             digitalWrite(SOL[s],LOW);
-            delay(50);
+            delay(100);
             digitalWrite(SOL[s],HIGH);
           }
           stat[s]=0;
@@ -112,7 +112,7 @@ void loop() {
         // 점자셀 중 현재의 상태와 표현하고자 하는 부분을 계산하여 동작
         if(cell[s]!=stat[s]){
           digitalWrite(SOL[s],LOW);
-          delay(50);
+          delay(100);
           digitalWrite(SOL[s],HIGH);
           // 현재 상태 수정
           if(stat[s]==0){
